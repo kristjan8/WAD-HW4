@@ -1,6 +1,6 @@
 <template>
     <div class="contentcompo">
-        <p class="posts" v-for="post in postsList" :key="post.id">
+        <p class="posts" v-for="post in postsList" :key="post.id" @click="this.$router.push('/editpost/' + post.id)">
             <table width="100%">
                 <tr>
                     <td>{{post.username}}</td>
@@ -69,7 +69,7 @@
     }
 
     .button {
-        background-color: rgb(19, 59, 44);
+        background-color: #4CAF50;
         color: aliceblue;
         padding: 10px;
         padding-inline: 30px;

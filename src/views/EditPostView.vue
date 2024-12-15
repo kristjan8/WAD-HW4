@@ -1,13 +1,13 @@
 <template>
-  <div class="add-post">
+  <div class="edit-post">
     <HeaderCompo class="header"></HeaderCompo>
-    <div class="add-post-content">
+    <div class="edit-post-content">
       <!-- Left Sidebar -->
       <SidebarCompo class="left-sidebar"></SidebarCompo>
 
-      <!-- Add Post Form -->
-      <div class="add-post-form">
-        <h2>Add Post</h2>
+      <!-- Edit Post Form -->
+      <div class="edit-post-form">
+        <h2>Edit Post</h2>
         <form @submit.prevent="submitPost">
           <div class="form-group">
             <label for="body">Body</label>
@@ -22,7 +22,8 @@
           </div>
 
           <div class="form-actions">
-            <button @click="submitPost" class="add-button" >Add</button>
+            <button @click="this.$router.push('/')" class="button" >Update post</button>
+            <button @click="this.$router.push('/')" class="button" >Delete post</button>
           </div>
         </form>
       </div>
@@ -40,7 +41,7 @@ import FooterCompo from '@/components/FooterCompo.vue';
 import SidebarCompo from '@/components/SidebarCompo.vue';
 
 export default {
-  name: 'AddPostPage',
+  name: 'EditPostPage',
   components: {
     HeaderCompo,
     FooterCompo,
@@ -120,20 +121,20 @@ export default {
 </script>
 
 <style scoped>
-.add-post {
+.edit-post {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
 
-.add-post-content {
+.edit-post-content {
   display: flex;
   justify-content: center;
   align-items: center;
   flex: 1;
 }
 
-.add-post-form {
+.edit-post-form {
   padding: 20px;
   background-color: #f0f4f8;
   border-radius: 8px;
@@ -175,7 +176,7 @@ button {
   margin: 10px 5px;
 }
 
-.add-button {
+.button {
   background-color: #4CAF50;
   color: aliceblue;
   padding: 10px;
