@@ -1,8 +1,13 @@
-# homework3
+# homework4
 
 ## Project setup
 ```
 npm install
+```
+
+### Runs the back-end server
+```
+nodemon server
 ```
 
 ### Compiles and hot-reloads for development
