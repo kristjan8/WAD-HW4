@@ -4,9 +4,11 @@
         <h3>
             <router-link to="/" class="button">Home</router-link>
             <router-link to="/" class="button">Contacts</router-link>
+            <router-link to="/addpost" class="button">Add Post</router-link>
             Homework #4
             <router-link to="/signup" class="button">Signup</router-link>
             <router-link to="/login" class="button">Login</router-link>
+            <router-link to="/" class="button">Logout</router-link>
             </h3>
     </div>
 </template>
