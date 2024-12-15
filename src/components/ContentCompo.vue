@@ -7,39 +7,48 @@
                     <td style="text-align: right">{{post.datetime}}</td>
                 </tr>
             </table>
-            <img v-if="post.image !== ''" :src="post.image">
             <br>
-            {{post.text}}
-            <table width="100%">
-                <tr>
-                    <td><img src="../assets/like.png" height="25" width="25" @click="likePost(post.id)" style="cursor: pointer;"></td>
-                    <td style="text-align:right">{{post.likes}} likes</td>
-                </tr>
-            </table>
+            {{post.body}}
         </p>
-        <button v-on:click="resetLikes()"> Reset likes </button>
+        <br>
+        <router-link to="/addpost" class="button">Add post</router-link>
+        <button @click="deleteAll" class="button">Delete all</button>
     </div>
 </template>
   
 <script>
     export default {
         name: 'ContentCompo',
-        data: function() {
+        data() {
             return {
-            }},
-        computed: {
-            postsList(){
-                return this.$store.state.postsList
-            }
+                postsList: [],
+            };
         },
-        methods: { 
-            likePost(postId) { 
-                this.$store.dispatch('incrementLikes', postId); 
+        methods: {
+            fetchPosts() {
+            fetch('http://localhost:3000/api/posts')
+                .then((response) => response.json())
+                .then((data) => (this.postsList = data))
+                .catch((err) => console.log(err.message));
             },
-            resetLikes() { 
-                this.$store.dispatch('resetLikes'); 
-            } 
-        }
+            deleteAll() {
+                fetch('http://localhost:3000/api/posts/', {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                })
+                .then((response) => {
+                console.log(response.data);
+                })
+                .catch((e) => {
+                console.log(e);
+                });
+                setTimeout(function() {location.reload()}, 500);
+            },
+        },
+        mounted() {
+            this.fetchPosts();
+            console.log("mounted");
+        },
     }
 </script>
 
@@ -59,15 +68,19 @@
         text-align: left;
     }
 
-    button {
-        background-color: darkred;
+    .button {
+        background-color: rgb(19, 59, 44);
         color: aliceblue;
         padding: 10px;
         padding-inline: 30px;
         border-radius: 20px;
+        margin: 10px;
         cursor: pointer;
+        text-decoration: none;
+        font-size: medium;
     }
-    button:hover {
+
+    .button:hover {
     background-color: #45a049; /* Change background color on hover */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add a shadow on hover */
     }

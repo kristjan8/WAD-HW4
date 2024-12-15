@@ -10,19 +10,19 @@
         <h2>Add Post</h2>
         <form @submit.prevent="submitPost">
           <div class="form-group">
-            <label for="body">Body:</label>
-            <input
-              type="text"
+            <label for="body">Body</label>
+            <textarea
               id="body"
-              v-model="body"
+              v-model="post.body"
               placeholder="Enter post content"
               required
+              rows="4"
             />
             <p v-if="bodyError" class="error">{{ bodyError }}</p>
           </div>
 
           <div class="form-actions">
-            <button type="submit" class="add-button" :disabled="!isFormValid">Add</button>
+            <button @click="submitPost" class="add-button" >Add</button>
           </div>
         </form>
       </div>
@@ -48,8 +48,12 @@ export default {
   },
   data() {
     return {
-      body: '',
-      bodyError: ''
+      post: {
+        body: '',
+        username: '',
+        datetime: '',
+        bodyError: ''
+      }
     };
   },
   computed: {
@@ -64,20 +68,43 @@ export default {
       this.validateBody();
 
       if (this.isFormValid) {
+        const time = new Date().toISOString();
+        var data = {
+          body: this.post.body,
+          username: '',
+          datetime: time,
+        };
+
+        fetch("http://localhost:3000/api/posts", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.$router.push("/");
+        })
+        .catch((e) => {
+          console.log(e);
+          console.log("error");
+        });
+
+
         alert('Post added successfully!');
-        // Call API to add the post here
-        // Example:
-        // axios.post('/api/posts', { body: this.body })
-        //   .then(() => this.$router.push('/home'));
+        this.$router.push("/");
+        setTimeout(function() {location.reload()}, 500);
+
       } else {
         alert('Please correct the errors before adding the post.');
       }
     },
     // Validate the post body
     validateBody() {
-      if (!this.body) {
+      if (!this.post.body) {
         this.bodyError = 'Post body is required.';
-      } else if (this.body.length < 5) {
+      } else if (this.post.body.length < 5) {
         this.bodyError = 'Post body must be at least 5 characters long.';
       } else {
         this.bodyError = '';
@@ -130,8 +157,8 @@ label {
   display: block;
 }
 
-input {
-  width: 100%;
+textarea {
+  width: 95%;
   padding: 10px;
   margin-top: 5px;
   border: 1px solid #ccc;
