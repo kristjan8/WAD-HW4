@@ -68,6 +68,10 @@
         text-align: left;
     }
 
+    .posts:hover {
+        cursor: pointer;
+    }
+
     .button {
         background-color: #4CAF50;
         color: aliceblue;

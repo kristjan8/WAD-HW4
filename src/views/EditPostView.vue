@@ -22,8 +22,8 @@
           </div>
 
           <div class="form-actions">
-            <button @click="this.$router.push('/')" class="button" >Update post</button>
-            <button @click="this.$router.push('/')" class="button" >Delete post</button>
+            <button @click="updatePost(this.$route.params.id)" class="button" >Update post</button>
+            <button @click="deletePost(this.$route.params.id)" class="button" >Delete post</button>
           </div>
         </form>
       </div>
@@ -63,21 +63,30 @@ export default {
       return this.bodyError === '';
     }
   },
+
   methods: {
-    // Handle form submission
-    submitPost() {
+    fetchAPost(id) {
+      // Fetch one post with the specied id (id)
+      fetch(`http://localhost:3000/api/posts/${id}`)
+        .then((response) => response.json())
+        .then((data) => (this.post = data))
+        .catch((err) => console.log(err.message));
+    },
+
+    // Handle post update
+    updatePost(id) {
       this.validateBody();
 
       if (this.isFormValid) {
-        const time = new Date().toISOString();
+        const time = new Date().toLocaleString();
         var data = {
           body: this.post.body,
           username: '',
           datetime: time,
         };
 
-        fetch("http://localhost:3000/api/posts", {
-          method: "POST",
+        fetch(`http://localhost:3000/api/posts/${id}`, {
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
@@ -101,6 +110,30 @@ export default {
         alert('Please correct the errors before adding the post.');
       }
     },
+
+    // Handle post update
+    deletePost(id) {
+        fetch(`http://localhost:3000/api/posts/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.$router.push("/");
+        })
+        .catch((e) => {
+          console.log(e);
+          console.log("error");
+        });
+
+
+        alert('Post deleted successfully!');
+        this.$router.push("/");
+        setTimeout(function() {location.reload()}, 500);
+    },
+
     // Validate the post body
     validateBody() {
       if (!this.post.body) {
@@ -112,6 +145,11 @@ export default {
       }
     }
   },
+
+  mounted() {
+    this.fetchAPost(this.$route.params.id);
+  },
+
   watch: {
     body() {
       this.validateBody();

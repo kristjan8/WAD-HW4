@@ -68,7 +68,7 @@ export default {
       this.validateBody();
 
       if (this.isFormValid) {
-        const time = new Date().toISOString();
+        const time = new Date().toLocaleString();
         var data = {
           body: this.post.body,
           username: '',
